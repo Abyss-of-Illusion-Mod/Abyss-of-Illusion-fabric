@@ -1,16 +1,20 @@
 package com.aoimod;
 
+import com.aoimod.blocks.ModBlocks;
+import com.aoimod.items.ModItemGroups;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExampleMod implements ModInitializer {
+public class AbyssOfIllusionMod implements ModInitializer {
 	public static final String MOD_ID = "abyss-of-illusion";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Initializing Mod...");
+		ModBlocks.initialize();
+		ModItemGroups.initialize();
 	}
 }

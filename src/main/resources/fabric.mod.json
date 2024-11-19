@@ -3,12 +3,13 @@
 	"id": "abyss-of-illusion",
 	"version": "${version}",
 	"name": "Abyss of Illusion",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "",
 	"authors": [
-		"Me!"
+		"Snow_KittenXD",
+		""
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
+		"homepage": "https://github.com/Abyss-of-Illusion-Mod/Abyss-of-Illusion-fabric",
 		"sources": "https://github.com/Abyss-of-Illusion-Mod/Abyss-of-Illusion-fabric"
 	},
 	"license": "CC0-1.0",
@@ -16,7 +17,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.aoimod.ExampleMod"
+          	"com.aoimod.AbyssOfIllusionMod"
 		],
 		"client": [
 			"com.aoimod.ExampleModClient"
