@@ -2,8 +2,6 @@ package com.aoimod.blocks;
 
 import com.aoimod.AbyssOfIllusionMod;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -33,7 +31,7 @@ public class ModBlocks {
     }
 
     public static void initialize() {
-        ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
+        ServerLifecycleEvents.SERVER_STARTING.register(minecraftServer -> {
             Twig.TwigTypeEnum.build();
         });
     }

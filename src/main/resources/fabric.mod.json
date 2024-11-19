@@ -20,7 +20,7 @@
           	"com.aoimod.AbyssOfIllusionMod"
 		],
 		"client": [
-			"com.aoimod.ExampleModClient"
+			"com.aoimod.AbyssOfIllusionClient"
 		]
 	},
 	"mixins": [
