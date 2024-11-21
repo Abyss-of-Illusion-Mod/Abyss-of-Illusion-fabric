@@ -1,16 +1,19 @@
-package com.aoimod.generator;
+package com.aoimod.extra;
 
 import com.aoimod.blocks.ModBlocks;
 import com.aoimod.blocks.Twig;
-import com.aoimod.properties.TwigProperty;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 
@@ -41,21 +44,19 @@ public class TwigTreeDecorator extends TreeDecorator {
         generator.getLogPositions().stream().min(Comparator.comparingInt(Vec3i::getY)).ifPresent(bottom -> {
             var world = generator.getWorld();
             var random = generator.getRandom();
-            for (int i = 0, times = random.nextBetween(3, 5); i < times; i++) {
+            for (int i = 0, times = random.nextBetween(2, 4); i < times; i++) {
                 int x = random.nextBetween(-3, 3),
-                    dy = 0,
                     z = random.nextBetween(-3, 3);
+                BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, bottom.add(x, 0, z));
+                while (world.testBlockState(pos.offset(Direction.DOWN), state -> state.isReplaceable() || !state.isOpaqueFullCube()))
+                    pos = pos.offset(Direction.DOWN);
 
-                BlockPos pos = bottom.add(x, 1, z);
-                while (world.testBlockState(pos.add(0, dy - 1, 0), BlockState::isAir) && dy >= -1) {
-                    dy --;
-                }
-
-                pos = pos.offset(Direction.Axis.Y, dy);
-                if (world.testBlockState(pos, state -> state.isAir() || state.isReplaceable()) &&
-                    world.testBlockState(pos.offset(Direction.DOWN), state -> !state.isAir() && !state.isOf(ModBlocks.TWIG) && state.isSolid()) &&
+                if (world.testBlockState(pos, state -> state.isReplaceable() || !state.isOpaqueFullCube() || state.getBlock() instanceof PlantBlock) &&
+                    world.testBlockState(pos.offset(Direction.DOWN), AbstractBlock.AbstractBlockState::isOpaqueFullCube) &&
                     world.testFluidState(pos.offset(Direction.DOWN), FluidState::isEmpty)) {
-                    generator.replace(pos, ModBlocks.TWIG.getDefaultState().with(Twig.WOOD_TYPE, type));
+                    generator.replace(pos, ModBlocks.TWIG.getDefaultState()
+                            .with(Twig.TWIG_TYPE, type)
+                            .with(Twig.FACING, Direction.Type.HORIZONTAL.random(random)));
                 }
             }
         });

@@ -16,7 +16,8 @@ public class ModBlocks {
     public static final Block TWIG = register(
             Twig::new,
             AbstractBlock.Settings.create()
-                    .burnable(),
+                    .burnable()
+                    .nonOpaque(),
             "twig",
             true);
     public static Block register(Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, String name, boolean forItem) {
@@ -31,8 +32,5 @@ public class ModBlocks {
     }
 
     public static void initialize() {
-        ServerLifecycleEvents.SERVER_STARTING.register(minecraftServer -> {
-            Twig.TwigTypeEnum.build();
-        });
     }
 }

@@ -1,7 +1,7 @@
 package com.aoimod.mixin;
 
 import com.aoimod.blocks.Twig;
-import com.aoimod.generator.TwigTreeDecorator;
+import com.aoimod.extra.TwigTreeDecorator;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;

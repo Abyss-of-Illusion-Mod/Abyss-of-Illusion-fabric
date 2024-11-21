@@ -1,4 +1,4 @@
-package com.aoimod.generator;
+package com.aoimod.extra;
 
 import com.aoimod.AbyssOfIllusionMod;
 import net.minecraft.registry.Registries;
@@ -12,4 +12,8 @@ public class ModTreeDecoratorTypes {
                     Registries.TREE_DECORATOR_TYPE,
                     Identifier.of(AbyssOfIllusionMod.MOD_ID, "twig_tree_decorator"),
                     new TreeDecoratorType<>(TwigTreeDecorator.CODEC));
+
+    public static void initialize() {
+
+    }
 }

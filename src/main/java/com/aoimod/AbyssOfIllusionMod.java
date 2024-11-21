@@ -1,6 +1,8 @@
 package com.aoimod;
 
 import com.aoimod.blocks.ModBlocks;
+import com.aoimod.components.ModComponents;
+import com.aoimod.extra.ModTreeDecoratorTypes;
 import com.aoimod.items.ModItemGroups;
 import net.fabricmc.api.ModInitializer;
 
@@ -16,5 +18,7 @@ public class AbyssOfIllusionMod implements ModInitializer {
 		LOGGER.info("Initializing Mod...");
 		ModBlocks.initialize();
 		ModItemGroups.initialize();
+		ModTreeDecoratorTypes.initialize();
+		ModComponents.initialize();
 	}
 }

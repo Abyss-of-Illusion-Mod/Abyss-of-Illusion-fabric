@@ -21,6 +21,9 @@
 		],
 		"client": [
 			"com.aoimod.AbyssOfIllusionClient"
+		],
+		"fabric-datagen": [
+			"com.aoimod.AbyssOfIllusionModGenerator"
 		]
 	},
 	"mixins": [

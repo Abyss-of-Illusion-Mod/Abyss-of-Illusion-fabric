@@ -1,13 +1,11 @@
 package com.aoimod;
 
-import com.aoimod.blocks.ModBlocks;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.minecraft.client.render.RenderLayer;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 
 public class AbyssOfIllusionClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-//		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TWIG, RenderLayer.getTranslucent());
+		ModelLoadingPlugin.register(new AbyssOfIllusionModelLoadingPlugin());
 	}
 }

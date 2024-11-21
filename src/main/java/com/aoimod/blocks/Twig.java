@@ -1,25 +1,32 @@
 package com.aoimod.blocks;
 
-import com.aoimod.generator.TwigTreeDecorator;
+import com.aoimod.components.ModComponents;
 import com.aoimod.properties.TwigProperty;
+import com.aoimod.utils.Base37;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.Identifier;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class Twig extends Block {
 
@@ -29,7 +36,7 @@ public class Twig extends Block {
         String wood;
 
         TwigTypeEnum(String wood) {
-            this.wood = wood.replace('_', '1').replace('.', '_');
+            this.wood = wood;
         }
 
         public String toString() {
@@ -45,31 +52,18 @@ public class Twig extends Block {
             return wood.compareTo(o.wood);
         }
 
-        static void build() {
-            TagKey<Block> logs = TagKey.of(Registries.BLOCK.getKey(), Identifier.of("logs"));
-            List<Block> blocks = Registries.BLOCK.streamEntries()
-                    .filter(entry -> entry.isIn(logs))
-                    .filter(entry -> {
-                        String name = entry.value().toString();
-                        return name.contains("log") && !name.contains("stripped");
-                    })
-                    .map(RegistryEntry.Reference::value)
-                    .toList();
-
-            for (var block: blocks) {
-                System.out.println(block.getTranslationKey());
-                record.put(block.getTranslationKey(), new TwigTypeEnum(block.getTranslationKey()));
-            }
-
-            System.out.println(record);
+        public static TwigTypeEnum getOrCreate(String wood) {
+            String encoded = Base37.encode(wood);
+            return record.getOrDefault(encoded, new TwigTypeEnum(encoded));
         }
 
-        public static TwigTypeEnum getOrCreate(String wood) {
-            return record.getOrDefault(wood, new TwigTypeEnum(wood));
+        public static TwigTypeEnum getRaw(String encoded) {
+            return record.get(encoded);
         }
 
         public static TwigTypeEnum addEnum(String wood) {
-            return record.put(wood, new TwigTypeEnum(wood));
+            String encoded = Base37.encode(wood);
+            return record.put(encoded, new TwigTypeEnum(encoded));
         }
 
         static {
@@ -84,15 +78,29 @@ public class Twig extends Block {
         }
     }
 
-    public static final TwigProperty WOOD_TYPE = new TwigProperty("wood_type", TwigTypeEnum.class);
+    public static final Codec<TwigTypeEnum> CODEC =
+            RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.STRING.fieldOf("twig_type")
+                            .forGetter(TwigTypeEnum::toString)
+            ).apply(instance, TwigTypeEnum::getRaw));
+    public static final TwigProperty TWIG_TYPE = new TwigProperty("twig_type", TwigTypeEnum.class);
+    public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
 
     public Twig(Settings settings) {
         super(settings);
     }
 
+    protected BlockState rotate(BlockState state, BlockRotation rotation) {
+        return state.with(FACING, rotation.rotate(state.get(FACING)));
+    }
+
+    protected BlockState mirror(BlockState state, BlockMirror mirror) {
+        return state.rotate(mirror.getRotation(state.get(FACING)));
+    }
+
     @Override
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.cuboid(0.125, 0, 0.25, 0.875, 0.125, 0.75);
+        return VoxelShapes.cuboid(0, 0, 0, 1, 0.125, 1);
     }
 
     @Override
@@ -102,6 +110,26 @@ public class Twig extends Block {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(WOOD_TYPE);
+        builder
+                .add(TWIG_TYPE)
+                .add(FACING);
+    }
+
+    @Override
+    protected List<ItemStack> getDroppedStacks(BlockState state, LootWorldContext.Builder builder) {
+        ItemStack stack = new ItemStack(state.getBlock());
+        stack.set(ModComponents.TWIG_TYPE, state.get(TWIG_TYPE));
+        return List.of(stack);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        ItemStack stack = ctx.getStack();
+        return this.getDefaultState()
+                .with(FACING, ctx.getHorizontalPlayerFacing())
+                .with(TWIG_TYPE, Objects.requireNonNullElse(
+                        stack.get(ModComponents.TWIG_TYPE),
+                        TwigTypeEnum.record.values().iterator().next()));
     }
 }
