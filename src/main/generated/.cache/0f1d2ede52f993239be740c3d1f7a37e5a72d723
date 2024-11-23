@@ -1,1 +1,17 @@
-// 1.21.3	2024-11-20T15:48:52.4762696	Abyss of Illusion/Model Definitions
+// 1.21.3	2024-11-23T10:02:52.9669336	Abyss of Illusion/Model Definitions
+4fd899860bf7bc3d223249c3fd7e743e72f1e63c assets\minecraft\blockstates\cobblestone.json
+04440e428cdb7915d076a7d7417d830d47a132ee assets\abyss-of-illusion\blockstates\quartzite.json
+d7a28bf2164a205283ff68c5091782c1bc18f07f assets\abyss-of-illusion\blockstates\twig.json
+42aa5d3952cd53d632824014eff2075466a7de7f assets\abyss-of-illusion\models\item\shale.json
+8aa14058a7387450d8559aa54b63361faa8f4c78 assets\abyss-of-illusion\models\block\quartzite.json
+cd8402af4d4da130b256783a1289840bb383dd77 assets\abyss-of-illusion\models\item\pebble.json
+fb13d068ae2c183c90e2733723bedc3f97416e8d assets\abyss-of-illusion\models\block\cobblestone-1.json
+b59eb8bf8193c6a3ecf62dc1213ec0f0923498f0 assets\abyss-of-illusion\models\block\shale.json
+8b3708d2e4226260c67f80ab25c50b9bc98ee55a assets\abyss-of-illusion\models\block\cobblestone-4.json
+7c894dfac4262a9562b0cb94f19a13f2306dabf9 assets\abyss-of-illusion\models\block\cobblestone-5.json
+0bb8f8716f9de5f728e2bb18c058adbee2afe667 assets\abyss-of-illusion\blockstates\shale.json
+81b8129ec83ac89988f5486ca6da1cf38f2bac9e assets\abyss-of-illusion\models\item\quartzite.json
+f1ba8553412e94c68ccd2d5af7fd28b625e4f555 assets\abyss-of-illusion\models\block\cobblestone-2.json
+75ba33da18dca3ae45c3aab90e4d9c058d448643 assets\abyss-of-illusion\models\item\twig.json
+0b3166bf618817c9369ded768ba0aaefb5d8e959 assets\abyss-of-illusion\models\block\cobblestone-3.json
+08eebe9eafa9e246401337b1e573a9c9c3ce9f97 assets\abyss-of-illusion\models\item\stone_scrapper.json

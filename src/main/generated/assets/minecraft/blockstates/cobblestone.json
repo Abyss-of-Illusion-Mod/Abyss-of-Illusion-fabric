@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "taken=0": {
+      "model": "minecraft:block/cobblestone"
+    },
+    "taken=1": {
+      "model": "abyss-of-illusion:block/cobblestone-1"
+    },
+    "taken=2": {
+      "model": "abyss-of-illusion:block/cobblestone-2"
+    },
+    "taken=3": {
+      "model": "abyss-of-illusion:block/cobblestone-3"
+    },
+    "taken=4": {
+      "model": "abyss-of-illusion:block/cobblestone-4"
+    },
+    "taken=5": {
+      "model": "abyss-of-illusion:block/cobblestone-5"
+    },
+    "taken=6": {
+      "model": "minecraft:block/cobblestone"
+    }
+  }
+}

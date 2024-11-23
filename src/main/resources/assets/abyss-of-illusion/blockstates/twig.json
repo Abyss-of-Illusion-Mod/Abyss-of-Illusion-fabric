@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "abyss-of-illusion:block/twig", "y": 270 },
-    "facing=south": { "model": "abyss-of-illusion:block/twig", "y": 90 },
-    "facing=west": { "model": "abyss-of-illusion:block/twig", "y": 180 },
-    "facing=east": { "model": "abyss-of-illusion:block/twig" }
-  }
-}

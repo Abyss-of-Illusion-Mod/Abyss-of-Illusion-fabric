@@ -1,4 +1,9 @@
 {
   "itemGroup.abyss-of-illusion.natural": "無神之地：自然生成",
-  "block.abyss-of-illusion.twig": "樹枝"
+  "itemGroup.abyss-of-illusion.tools": "無神之地：工具",
+  "block.abyss-of-illusion.quartzite": "石英岩",
+  "block.abyss-of-illusion.shale": "頁岩",
+  "block.abyss-of-illusion.twig": "樹枝",
+  "item.abyss-of-illusion.stone_scrapper": "石刮刀",
+  "item.abyss-of-illusion.pebble": "卵石"
 }

@@ -19,7 +19,7 @@ public class AbyssOfIllusionModelLoadingPlugin implements ModelLoadingPlugin {
             final ModelIdentifier id = context.topLevelId();
 //            if (id != null)
             if (id != null && modelTable.get(id) != null) {
-                System.out.format("%s, %s\n", id, id.variant());
+//                System.out.format("%s, %s\n", id, id.variant());
                 return modelTable.get(id);
             } else {
                 return original;

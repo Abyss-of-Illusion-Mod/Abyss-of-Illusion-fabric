@@ -1,4 +1,9 @@
 {
-  "itemGroup.abyss-of-illusion.natural": "Abyss of Illusion : natural",
-  "block.abyss-of-illusion.twig": "Twig"
+  "itemGroup.abyss-of-illusion.natural": "Abyss of Illusion : Natural",
+  "itemGroup.abyss-of-illusion.tools": "Abyss of Illusion : Tools",
+  "block.abyss-of-illusion.quartzite": "Quartzite",
+  "block.abyss-of-illusion.shale": "Shale",
+  "block.abyss-of-illusion.twig": " Twig",
+  "item.abyss-of-illusion.stone_scrapper": "Stone Scrapper",
+  "item.abyss-of-illusion.pebble": "Pebble"
 }

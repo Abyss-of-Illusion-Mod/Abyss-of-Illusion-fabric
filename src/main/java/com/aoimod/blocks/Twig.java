@@ -8,12 +8,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
@@ -118,7 +121,13 @@ public class Twig extends Block {
     @Override
     protected List<ItemStack> getDroppedStacks(BlockState state, LootWorldContext.Builder builder) {
         ItemStack stack = new ItemStack(state.getBlock());
+        Text displayName = Text.literal("")
+                .append(Text.translatable(Base37.decode(state.get(TWIG_TYPE).toString())))
+                .append(Text.translatable("block.abyss-of-illusion.twig"));
+        System.out.println();
         stack.set(ModComponents.TWIG_TYPE, state.get(TWIG_TYPE));
+        stack.set(DataComponentTypes.CUSTOM_NAME, displayName);
+        stack.set(DataComponentTypes.ITEM_NAME, displayName);
         return List.of(stack);
     }
 

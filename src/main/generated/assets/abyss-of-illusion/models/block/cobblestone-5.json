@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cobblestone",
+  "textures": {
+    "all": "abyss-of-illusion:block/cobblestone-5"
+  }
+}

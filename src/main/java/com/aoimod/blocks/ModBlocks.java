@@ -20,6 +20,21 @@ public class ModBlocks {
                     .nonOpaque(),
             "twig",
             true);
+    public static final Block QUARTZITE = register(
+            Quartzite::new,
+            AbstractBlock.Settings.create()
+                    .strength(2f)
+                    .requiresTool(),
+            "quartzite",
+            true);
+    public static final Block SHALE = register(
+            Quartzite::new,
+            AbstractBlock.Settings.create()
+                    .strength(2f)
+                    .requiresTool(),
+            "shale",
+            true);
+
     public static Block register(Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, String name, boolean forItem) {
         Identifier id = Identifier.of(AbyssOfIllusionMod.MOD_ID, name);
         RegistryKey<Block> key = RegistryKey.of(Registries.BLOCK.getKey(), id);

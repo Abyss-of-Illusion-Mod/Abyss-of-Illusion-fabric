@@ -1,11 +1,13 @@
 {
-	"required": true,
-	"package": "com.aoimod.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-      	"TreeDecoratorMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "com.aoimod.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BiomeMixin",
+    "CobblestoneMixin",
+    "TreeDecoratorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }

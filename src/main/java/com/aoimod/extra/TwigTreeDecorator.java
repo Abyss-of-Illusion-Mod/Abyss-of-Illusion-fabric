@@ -47,12 +47,12 @@ public class TwigTreeDecorator extends TreeDecorator {
             for (int i = 0, times = random.nextBetween(2, 4); i < times; i++) {
                 int x = random.nextBetween(-3, 3),
                     z = random.nextBetween(-3, 3);
-                BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, bottom.add(x, 0, z));
+                BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE_WG, bottom.add(x, 0, z));
                 while (world.testBlockState(pos.offset(Direction.DOWN), state -> state.isReplaceable() || !state.isOpaqueFullCube()))
                     pos = pos.offset(Direction.DOWN);
 
                 if (world.testBlockState(pos, state -> state.isReplaceable() || !state.isOpaqueFullCube() || state.getBlock() instanceof PlantBlock) &&
-                    world.testBlockState(pos.offset(Direction.DOWN), AbstractBlock.AbstractBlockState::isOpaqueFullCube) &&
+                    world.testBlockState(pos.offset(Direction.DOWN), BlockState::isOpaqueFullCube) &&
                     world.testFluidState(pos.offset(Direction.DOWN), FluidState::isEmpty)) {
                     generator.replace(pos, ModBlocks.TWIG.getDefaultState()
                             .with(Twig.TWIG_TYPE, type)
