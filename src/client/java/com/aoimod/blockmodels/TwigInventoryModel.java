@@ -97,7 +97,7 @@ public class TwigInventoryModel implements UnbakedModel, BakedModel, FabricBaked
 
         ModelIdentifier mid = new ModelIdentifier(
                 Identifier.of(AbyssOfIllusionMod.MOD_ID, "twig"),
-                String.format("facing=%s,twig_type=%s", Direction.NORTH, twigType));
+                String.format("facing=%s,twig_type=%s,waterlogged=false", Direction.NORTH, twigType));
         BakedModel variantModel = MinecraftClient.getInstance().getBakedModelManager().getModel(mid);
         if (variantModel != null) {
             variantModel.emitItemQuads(stack, randomSupplier, context);

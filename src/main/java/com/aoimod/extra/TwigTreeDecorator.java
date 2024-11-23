@@ -10,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
@@ -44,16 +45,15 @@ public class TwigTreeDecorator extends TreeDecorator {
         generator.getLogPositions().stream().min(Comparator.comparingInt(Vec3i::getY)).ifPresent(bottom -> {
             var world = generator.getWorld();
             var random = generator.getRandom();
-            for (int i = 0, times = random.nextBetween(2, 4); i < times; i++) {
+            for (int i = 0, times = 3; i < times; i++) {
                 int x = random.nextBetween(-3, 3),
                     z = random.nextBetween(-3, 3);
-                BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE_WG, bottom.add(x, 0, z));
-                while (world.testBlockState(pos.offset(Direction.DOWN), state -> state.isReplaceable() || !state.isOpaqueFullCube()))
-                    pos = pos.offset(Direction.DOWN);
+                if (x == 0 && z == 0)
+                    continue;
 
-                if (world.testBlockState(pos, state -> state.isReplaceable() || !state.isOpaqueFullCube() || state.getBlock() instanceof PlantBlock) &&
-                    world.testBlockState(pos.offset(Direction.DOWN), BlockState::isOpaqueFullCube) &&
-                    world.testFluidState(pos.offset(Direction.DOWN), FluidState::isEmpty)) {
+                BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE_WG, bottom.add(x, 0, z));
+                if (world.testBlockState(pos.offset(Direction.DOWN), BlockState::isOpaqueFullCube) &&
+                    world.testFluidState(pos, state -> state.isEmpty() || state.isOf(Fluids.WATER))) {
                     generator.replace(pos, ModBlocks.TWIG.getDefaultState()
                             .with(Twig.TWIG_TYPE, type)
                             .with(Twig.FACING, Direction.Type.HORIZONTAL.random(random)));
