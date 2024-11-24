@@ -4,8 +4,10 @@ import com.aoimod.blockmodels.TwigInventoryModel;
 import com.aoimod.blockmodels.TwigModel;
 import com.aoimod.blocks.Twig;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 
 public class AbyssOfIllusionModelLoadingPlugin implements ModelLoadingPlugin {
     public static final HashMap<ModelIdentifier, UnbakedModel> modelTable = new HashMap<>();
+
     @Override
     public void initialize(Context pluginContext) {
         pluginContext.modifyModelOnLoad().register((original, context) -> {
@@ -25,6 +28,10 @@ public class AbyssOfIllusionModelLoadingPlugin implements ModelLoadingPlugin {
             }
         });
     }
+
+//    public static BakedModel getByItemStack(ItemStack stack) {
+//
+//    }
 
     static {
         for (var direction: Direction.values()) {

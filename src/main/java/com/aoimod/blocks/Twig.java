@@ -111,22 +111,14 @@ public class Twig extends Block implements Waterloggable {
         this.setDefaultState(getDefaultState().with(WATERLOGGED, false));
     }
 
+    @Override
     protected BlockState rotate(BlockState state, BlockRotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
+    @Override
     protected BlockState mirror(BlockState state, BlockMirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
-    }
-
-    @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.cuboid(0, 0, 0, 1, 0.125, 1);
-    }
-
-    @Override
-    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.empty();
     }
 
     @Override
@@ -140,8 +132,8 @@ public class Twig extends Block implements Waterloggable {
     @Override
     protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
         if (!world.isClient) {
-            if (world.getBlockState(pos.offset(Direction.UP)).isOf(ModBlocks.TWIG)) {
-                world.breakBlock(pos.offset(Direction.UP), true);
+            if (world.getBlockState(pos.down()).isOf(Blocks.AIR)) {
+                world.breakBlock(pos, true);
             }
         }
 
@@ -152,6 +144,16 @@ public class Twig extends Block implements Waterloggable {
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         var bottomState = world.getBlockState(pos.offset(Direction.DOWN));
         return bottomState.isOpaqueFullCube() || !bottomState.isReplaceable();
+    }
+
+    @Override
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return VoxelShapes.cuboid(0, 0, 0, 1, 0.125, 1);
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return VoxelShapes.empty();
     }
 
     @Override

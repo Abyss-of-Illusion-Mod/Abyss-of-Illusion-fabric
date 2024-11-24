@@ -1,7 +1,6 @@
 package com.aoimod.blocks;
 
 import com.aoimod.AbyssOfIllusionMod;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -34,6 +33,13 @@ public class ModBlocks {
                     .requiresTool(),
             "shale",
             true);
+    public static final Block CAMPFIRE = register(
+            Campfire::new,
+            AbstractBlock.Settings.create()
+                    .strength(1.5f)
+                    .nonOpaque(),
+            "campfire",
+            false);
 
     public static Block register(Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings, String name, boolean forItem) {
         Identifier id = Identifier.of(AbyssOfIllusionMod.MOD_ID, name);

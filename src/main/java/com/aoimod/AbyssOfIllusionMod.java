@@ -1,5 +1,6 @@
 package com.aoimod;
 
+import com.aoimod.blockentities.ModBlockEntityTypes;
 import com.aoimod.blocks.CustomCobblestone;
 import com.aoimod.blocks.ModBlocks;
 import com.aoimod.components.ModComponents;
@@ -19,10 +20,11 @@ public class AbyssOfIllusionMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing Mod...");
-		ModItemGroups.initialize();
 		ModTreeDecoratorTypes.initialize();
-		ModComponents.initialize();
+		ModBlockEntityTypes.initialize();
 		ModBlocks.initialize();
+		ModComponents.initialize();
+		ModItemGroups.initialize();
 		ModItems.initialize();
 	}
 }

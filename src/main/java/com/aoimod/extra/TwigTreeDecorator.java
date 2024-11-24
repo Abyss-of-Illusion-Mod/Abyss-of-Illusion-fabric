@@ -11,6 +11,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
@@ -48,16 +51,15 @@ public class TwigTreeDecorator extends TreeDecorator {
             for (int i = 0, times = 3; i < times; i++) {
                 int x = random.nextBetween(-3, 3),
                     z = random.nextBetween(-3, 3);
-                if (x == 0 && z == 0)
+
+                BlockPos pos = world.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, bottom.add(x, 0, z));
+                if (world.testBlockState(pos.down(), state -> state.isIn(TagKey.of(Registries.BLOCK.getKey(), Identifier.of("logs"))) || !state.isOpaqueFullCube()) ||
+                    world.testFluidState(pos, state -> !state.isEmpty() && !state.isOf(Fluids.WATER)))
                     continue;
 
-                BlockPos pos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE_WG, bottom.add(x, 0, z));
-                if (world.testBlockState(pos.offset(Direction.DOWN), BlockState::isOpaqueFullCube) &&
-                    world.testFluidState(pos, state -> state.isEmpty() || state.isOf(Fluids.WATER))) {
-                    generator.replace(pos, ModBlocks.TWIG.getDefaultState()
-                            .with(Twig.TWIG_TYPE, type)
-                            .with(Twig.FACING, Direction.Type.HORIZONTAL.random(random)));
-                }
+                generator.replace(pos, ModBlocks.TWIG.getDefaultState()
+                        .with(Twig.TWIG_TYPE, type)
+                        .with(Twig.FACING, Direction.Type.HORIZONTAL.random(random)));
             }
         });
     }
