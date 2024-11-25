@@ -19,12 +19,13 @@ public class ThirstHudOverlay implements HudRenderCallback {
             "textures/hud/empty_thirst.png");
 
     private static final int EMPTY_U = 0;
-    private static final int ICON_SIZE = 12;
+    private static final int ICON_SIZE = 9;
 
     @Override
     public void onHudRender(DrawContext drawContext, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null)
+        if (client.player == null && !client.player.isInvulnerable() && !client.player.isCreative()
+                && !client.player.isSpectator())
             return;
 
         IThirsty thirsty = (IThirsty) client.player;
@@ -40,8 +41,8 @@ public class ThirstHudOverlay implements HudRenderCallback {
             drawContext.drawTexture(
                     RenderLayer::getGuiTextured,
                     EMPTY_ICONS,
-                    x - 94 + (i * 9),
-                    y - 54,
+                    x + 8 + (i * 8),
+                    y - 49,
                     EMPTY_U,
                     0,
                     ICON_SIZE,
@@ -54,8 +55,8 @@ public class ThirstHudOverlay implements HudRenderCallback {
                 drawContext.drawTexture(
                         RenderLayer::getGuiTextured,
                         THIRST_ICONS,
-                        x - 94 + (i * 9),
-                        y - 54,
+                        x + 8 + (i * 8),
+                        y - 49,
                         EMPTY_U,
                         0,
                         ICON_SIZE,
