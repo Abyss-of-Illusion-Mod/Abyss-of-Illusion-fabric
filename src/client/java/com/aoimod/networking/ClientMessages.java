@@ -1,7 +1,10 @@
 package com.aoimod.networking;
 
 import com.aoimod.blockentities.CampfireBlockEntity;
+import com.aoimod.custonvalues.IThirsty;
 import com.aoimod.networking.packet.CampfireDataS2CPacket;
+import com.aoimod.networking.packet.ThirstyS2CPacket;
+
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.item.ItemStack;
@@ -14,6 +17,14 @@ public class ClientMessages {
         PayloadTypeRegistry.playS2C().register(CampfireDataS2CPacket.ID, CampfireDataS2CPacket.CODEC);
 
         ClientPlayNetworking.registerGlobalReceiver(CampfireDataS2CPacket.ID, ClientMessages::campfireHandler);
+        PayloadTypeRegistry.playS2C().register(ThirstyS2CPacket.ID, ThirstyS2CPacket.CODEC);
+                ClientPlayNetworking.registerGlobalReceiver(ThirstyS2CPacket.ID,  ClientMessages::thirstyHandler);
+    }
+
+    private static void thirstyHandler(ThirstyS2CPacket packet, ClientPlayNetworking.Context context) {
+        context.client().execute(() -> {
+            ((IThirsty)context.player()).getThirsty().setThirst(packet.thirstValue());
+        });
     }
 
     private static void campfireHandler(CampfireDataS2CPacket packet, ClientPlayNetworking.Context context) {

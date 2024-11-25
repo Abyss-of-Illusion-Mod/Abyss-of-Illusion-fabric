@@ -5,7 +5,9 @@
   "mixins": [
     "BiomeMixin",
     "CobblestoneMixin",
-    "TreeDecoratorMixin"
+    "TreeDecoratorMixin",
+    "ItemMixin",
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
