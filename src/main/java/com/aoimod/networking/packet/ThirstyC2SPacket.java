@@ -13,8 +13,10 @@ public record ThirstyC2SPacket(float drinkValue) implements CustomPayload {
     public static final Id<ThirstyC2SPacket> ID = new Id<>(
             Identifier.of(AbyssOfIllusionMod.MOD_ID, "drinking_packet"));
 
-    public static final PacketCodec<RegistryByteBuf, ThirstyC2SPacket> CODEC = PacketCodec.tuple(PacketCodecs.FLOAT,
-            ThirstyC2SPacket::drinkValue, ThirstyC2SPacket::new);
+    public static final PacketCodec<RegistryByteBuf, ThirstyC2SPacket> CODEC = PacketCodec.tuple(
+        PacketCodecs.FLOAT,
+        ThirstyC2SPacket::drinkValue,
+        ThirstyC2SPacket::new);
 
     @Override
     public Id<? extends CustomPayload> getId() {

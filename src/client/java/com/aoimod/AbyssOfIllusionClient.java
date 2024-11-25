@@ -1,9 +1,11 @@
 package com.aoimod;
 
 import com.aoimod.blockentity.renderer.ModBlockEntityRenderers;
+import com.aoimod.hud.ThirstHudOverlay;
 import com.aoimod.networking.ClientMessages;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.render.RenderLayer;
 
 public class AbyssOfIllusionClient implements ClientModInitializer {
@@ -12,5 +14,6 @@ public class AbyssOfIllusionClient implements ClientModInitializer {
 		ClientMessages.initialize();
 		ModelLoadingPlugin.register(new AbyssOfIllusionModelLoadingPlugin());
 		ModBlockEntityRenderers.initialize();
+		HudRenderCallback.EVENT.register(new ThirstHudOverlay());
 	}
 }

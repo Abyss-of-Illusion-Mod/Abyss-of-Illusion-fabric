@@ -25,11 +25,8 @@ public class ItemMixin {
             if (!world.isClient && user instanceof ServerPlayerEntity serverplayer) {
                 float currentThirst = ((IThirsty) serverplayer).getThirsty().getThirst();
                 float newThirst = Math.min(currentThirst + 4f, 20.0f);
-
-                // 發送網路封包而不是直接修改
+                ((IThirsty) serverplayer).getThirsty().addThirsty(4f);
                 ServerPlayNetworking.send(serverplayer, new ThirstyS2CPacket(4f));
-
-                // 發送調試訊息
                 serverplayer.sendMessage(
                         Text.literal("§b[Debug] §f飲用藥水: ")
                                 .append(String.format("§e口渴值 %.1f → %.1f", currentThirst, newThirst)),

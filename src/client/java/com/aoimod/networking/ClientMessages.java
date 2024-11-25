@@ -17,8 +17,7 @@ public class ClientMessages {
         PayloadTypeRegistry.playS2C().register(CampfireDataS2CPacket.ID, CampfireDataS2CPacket.CODEC);
 
         ClientPlayNetworking.registerGlobalReceiver(CampfireDataS2CPacket.ID, ClientMessages::campfireHandler);
-        PayloadTypeRegistry.playS2C().register(ThirstyS2CPacket.ID, ThirstyS2CPacket.CODEC);
-                ClientPlayNetworking.registerGlobalReceiver(ThirstyS2CPacket.ID,  ClientMessages::thirstyHandler);
+        ClientPlayNetworking.registerGlobalReceiver(ThirstyS2CPacket.ID,  ClientMessages::thirstyHandler);
     }
 
     private static void thirstyHandler(ThirstyS2CPacket packet, ClientPlayNetworking.Context context) {
