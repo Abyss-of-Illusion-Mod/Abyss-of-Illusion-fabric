@@ -36,7 +36,7 @@ public class TwigInventoryModel implements UnbakedModel, BakedModel, FabricBaked
     private static final Transformation GROUND =
             new Transformation(new Vector3f(), new Vector3f(0f, 0.25f, 0f), new Vector3f(0.6f, 0.6f, 0.6f));
     private static final Transformation FIXED =
-            new Transformation(new Vector3f(), new Vector3f(), new Vector3f(1.2f, 1.2f, 1.2f));
+            new Transformation(new Vector3f(), new Vector3f(), new Vector3f(1f, 1f, 1f));
     private static final ModelTransformation SCALED = new ModelTransformation(
             THIRD_HAND, THIRD_HAND,
             FIRST_HAND, FIRST_HAND,

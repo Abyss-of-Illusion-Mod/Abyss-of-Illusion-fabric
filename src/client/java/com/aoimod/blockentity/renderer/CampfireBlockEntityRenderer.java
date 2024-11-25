@@ -17,10 +17,7 @@ import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class CampfireBlockEntityRenderer implements BlockEntityRenderer<CampfireBlockEntity> {
     private static final ItemStack PEBBLE = new ItemStack(ModItems.PEBBLE);
@@ -49,12 +46,12 @@ public class CampfireBlockEntityRenderer implements BlockEntityRenderer<Campfire
 
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
         matrices.translate(0.5f, -(9f / 32), 0);
-        for (int i = 0; i<campfire.getCachedState().get(Campfire.STONES); i++) {
+        for (int i = 0; i<campfire.getCachedState().get(Campfire.PEBBLES); i++) {
             matrices.push();
 
             matrices.translate(x[i], y[i], 1f / 32);
             matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-45 * i));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(4.4f));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(4.5f));
             itemRenderer.renderItem(PEBBLE, ModelTransformationMode.GROUND, renderLight, overlay, matrices, vertexConsumers, campfire.getWorld(), 0);
 
             matrices.pop();
@@ -64,14 +61,21 @@ public class CampfireBlockEntityRenderer implements BlockEntityRenderer<Campfire
         matrices.push();
 
         List<ItemStack> twigs = List.copyOf(campfire.getTwigs());
-        matrices.translate(0, 0.5f, 0);
-        matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90));
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(45));
-        for (int i=0; i<campfire.getCachedState().get(Campfire.TWIGS); i++) {
+        ListIterator<ItemStack> iter = twigs.listIterator();
+        float[] degrees = new float[] { 0, 180, 270, 180 };
+        matrices.translate(0.5f, -0.36f, 0.5f);
+        matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(180));
+        while (iter.hasNext()) {
+            int i = iter.nextIndex();
+            ItemStack stack = iter.next();
+
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(degrees[i]));
             matrices.push();
 
-            matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(90 * i));
-            itemRenderer.renderItem(twigs.get(i), ModelTransformationMode.FIXED, renderLight, overlay, matrices, vertexConsumers, campfire.getWorld(), 0);
+            if (i > 1)
+                matrices.translate(0, -0.06f, 0);
+            matrices.translate(0.3f, 0, 0);
+            itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, renderLight, overlay, matrices, vertexConsumers, campfire.getWorld(), 0);
 
             matrices.pop();
         }

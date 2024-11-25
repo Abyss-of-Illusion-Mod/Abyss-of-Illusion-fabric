@@ -28,13 +28,13 @@ public class Pebble extends Item {
             if (targetState.getBlock() instanceof Campfire campfire) {
                 ItemStack need = stack.split(campfire.getNeedPebble(targetState));
                 if (need.getCount() > 0) {
-                    world.setBlockState(pos, targetState.with(Campfire.STONES, targetState.get(Campfire.STONES) + need.getCount()));
+                    world.setBlockState(pos, targetState.with(Campfire.PEBBLES, targetState.get(Campfire.PEBBLES) + need.getCount()));
                     world.playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.PLAYERS);
                 }
             } else if (blockState.isOpaqueFullCube()) {
                 pos = pos.offset(context.getSide());
                 ItemStack need = stack.split(Campfire.NEED_PEBBLE_COUNT);
-                world.setBlockState(pos, ModBlocks.CAMPFIRE.getDefaultState().with(Campfire.STONES, need.getCount()));
+                world.setBlockState(pos, ModBlocks.CAMPFIRE.getDefaultState().with(Campfire.PEBBLES, need.getCount()));
                 world.playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.PLAYERS);
             } else {
                 return ActionResult.PASS;

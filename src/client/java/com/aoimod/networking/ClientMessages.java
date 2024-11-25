@@ -22,12 +22,9 @@ public class ClientMessages {
         World world = context.player().getWorld();
         context.client().execute(() -> {
             if (world.getBlockEntity(p.pos()) instanceof CampfireBlockEntity campfire) {
-                System.out.printf("Client end: %s%n", stacks);
-                for (var stack: stacks) {
-                    campfire.addTwigs(stack);
-                }
-
-                world.updateComparators(p.pos(), campfire.getCachedState().getBlock());
+                campfire.setStack(stacks);
+                campfire.markDirty();
+                campfire.updateState(world);
             }
         });
     }
