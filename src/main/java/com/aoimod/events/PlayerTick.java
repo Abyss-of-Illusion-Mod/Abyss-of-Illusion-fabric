@@ -1,4 +1,4 @@
-package com.aoimod.event;
+package com.aoimod.events;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
