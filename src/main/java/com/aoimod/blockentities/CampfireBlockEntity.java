@@ -5,7 +5,6 @@ import com.aoimod.blocks.Campfire;
 import com.aoimod.networking.packet.CampfireDataS2CPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -14,36 +13,53 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CampfireBlockEntity extends BlockEntity {
-    public record Packet(List<ItemStack> stacks, BlockPos pos) {
+public class CampfireBlockEntity extends BlockEntity implements RecipeInput {
+    public record Packet(List<ItemStack> twigs, ItemStack twigResult, ItemStack fuel, List<ItemStack> inventory, BlockPos pos) {
             public static Packet create(RegistryByteBuf buf) {
                 BlockPos pos = buf.readBlockPos();
-                ArrayList<ItemStack> twigs = new ArrayList<>();
-                int size = buf.readInt();
-                for (int i = 0; i < size; i++) {
-                    twigs.add(ItemStack.PACKET_CODEC.decode(buf));
-                }
 
-                return new Packet(twigs, pos);
+                DefaultedList<ItemStack> twigs = DefaultedList.ofSize(buf.readInt(), ItemStack.EMPTY);
+                twigs.replaceAll(ignored -> ItemStack.PACKET_CODEC.decode(buf));
+
+                ItemStack twigResult = buf.readBoolean() ? ItemStack.PACKET_CODEC.decode(buf) : ItemStack.EMPTY;
+                ItemStack fuel = buf.readBoolean() ? ItemStack.PACKET_CODEC.decode(buf) : ItemStack.EMPTY;
+
+                DefaultedList<ItemStack> inventory = DefaultedList.ofSize(buf.readInt(), ItemStack.EMPTY);
+                inventory.replaceAll(ignored -> ItemStack.PACKET_CODEC.decode(buf));
+
+                return new Packet(twigs, twigResult, fuel, inventory, pos);
             }
 
             public void write(RegistryByteBuf buf) {
                 buf.writeBlockPos(pos);
+                List<ItemStack> stacks = twigs.stream().filter(stack -> !stack.isEmpty()).toList();
+                List<ItemStack> result = inventory.stream().filter(stack -> !stack.isEmpty()).toList();
                 buf.writeInt(stacks.size());
                 for (var stack : stacks) {
+                    ItemStack.PACKET_CODEC.encode(buf, stack);
+                }
+
+                buf.writeBoolean(!twigResult.isEmpty());
+                if (!twigResult.isEmpty())
+                    ItemStack.PACKET_CODEC.encode(buf, twigResult);
+
+                buf.writeBoolean(!fuel.isEmpty());
+                if (!fuel.isEmpty())
+                    ItemStack.PACKET_CODEC.encode(buf, fuel);
+
+                buf.writeInt(result.size());
+                for (var stack: result) {
                     ItemStack.PACKET_CODEC.encode(buf, stack);
                 }
             }
@@ -56,20 +72,20 @@ public class CampfireBlockEntity extends BlockEntity {
             };
 
     private final DefaultedList<ItemStack> twigs = DefaultedList.ofSize(4, ItemStack.EMPTY);
+    private ItemStack twigResult = ItemStack.EMPTY;
+    private ItemStack fuel = ItemStack.EMPTY;
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
 
     public CampfireBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         ServerPlayConnectionEvents.JOIN.register(
                 Identifier.of(AbyssOfIllusionMod.MOD_ID, "init_campfire"),
-                (handler, sender, server) -> {
-                    server.execute(() -> {
-                        ServerPlayNetworking.send(handler.player, new CampfireDataS2CPacket(createPacket()));
-                    });
-                });
+                (handler, sender, server) -> server.execute(() ->
+                        ServerPlayNetworking.send(handler.player, new CampfireDataS2CPacket(createPacket()))));
     }
 
     public List<ItemStack> getTwigs() {
-        return twigs.stream().filter(stack -> !stack.isEmpty()).toList();
+        return twigs;
     }
 
     public void addTwigs(ItemStack stack) {
@@ -80,10 +96,6 @@ public class CampfireBlockEntity extends BlockEntity {
         }
     }
 
-    public Packet createPacket() {
-        return new Packet(getTwigs(), pos);
-    }
-
     public void setStack(List<ItemStack> stacks) {
         twigs.clear();
         for (int i=0; i<stacks.size(); i++) {
@@ -91,9 +103,40 @@ public class CampfireBlockEntity extends BlockEntity {
         }
     }
 
+    public ItemStack setFuel(ItemStack fuel) {
+        ItemStack result = this.fuel.copy();
+        this.fuel = fuel;
+        return result;
+    }
+
+    public ItemStack setItem(ItemStack item) {
+        ItemStack result = this.inventory.getFirst().copy();
+        this.inventory.set(0, item);
+        return result;
+    }
+
+    public void loadPacket(Packet packet) {
+        twigs.clear();
+        for (int i=0, size=packet.twigs.size(); i<size; i++) {
+            twigs.set(i, packet.twigs.get(i));
+        }
+
+        twigResult = packet.twigResult;
+        fuel = packet.fuel;
+
+        inventory.clear();
+        for (int i=0, size=packet.inventory.size(); i<size; i++) {
+            inventory.set(i, packet.inventory.get(i));
+        }
+    }
+
+    public Packet createPacket() {
+        return new Packet(twigs, twigResult, fuel, inventory, pos);
+    }
+
     public void updateState(World world) {
-        world.setBlockState(pos,
-                getCachedState().with(Campfire.TWIGS, getTwigs().size()));
+        int twigSize = (int) getTwigs().stream().filter(stack -> !stack.isEmpty()).count();
+        world.setBlockState(pos, getCachedState().with(Campfire.TWIGS, twigSize));
     }
 
     public void dropItems(World world) {
@@ -103,6 +146,20 @@ public class CampfireBlockEntity extends BlockEntity {
         }
     }
 
+    public static void tick(World world, BlockPos pos, BlockState state, CampfireBlockEntity blockEntity) {
+
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        return inventory.getFirst();
+    }
+
+    @Override
+    public int size() {
+        return 1;
+    }
+
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
         NbtList list = new NbtList();
@@ -110,13 +167,13 @@ public class CampfireBlockEntity extends BlockEntity {
                 .filter(stack -> !stack.isEmpty())
                 .map(stack -> stack.toNbt(registries))
                 .forEach(list::add);
-        nbt.put("stacks", list);
+        nbt.put("twigs", list);
     }
 
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
-        List<ItemStack> stacks = ((NbtList) Objects.requireNonNull(nbt.get("stacks"))).stream()
-                .map(stack -> ItemStack.fromNbt(registries, stack).get())
+        List<ItemStack> stacks = ((NbtList) Objects.requireNonNull(nbt.get("twigs"))).stream()
+                .map(stack -> ItemStack.fromNbt(registries, stack).orElseThrow())
                 .toList();
 
         twigs.clear();

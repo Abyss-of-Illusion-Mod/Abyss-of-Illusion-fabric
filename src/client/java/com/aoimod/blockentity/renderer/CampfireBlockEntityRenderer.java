@@ -60,7 +60,7 @@ public class CampfireBlockEntityRenderer implements BlockEntityRenderer<Campfire
         matrices.pop();
         matrices.push();
 
-        List<ItemStack> twigs = List.copyOf(campfire.getTwigs());
+        List<ItemStack> twigs = campfire.getTwigs().stream().filter(stack -> !stack.isEmpty()).toList();
         ListIterator<ItemStack> iter = twigs.listIterator();
         float[] degrees = new float[] { 0, 180, 270, 180 };
         matrices.translate(0.5f, -0.36f, 0.5f);
@@ -74,7 +74,7 @@ public class CampfireBlockEntityRenderer implements BlockEntityRenderer<Campfire
 
             if (i > 1)
                 matrices.translate(0, -0.06f, 0);
-            matrices.translate(0.3f, 0, 0);
+            matrices.translate(-0.05f, 0, 0);
             itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, renderLight, overlay, matrices, vertexConsumers, campfire.getWorld(), 0);
 
             matrices.pop();

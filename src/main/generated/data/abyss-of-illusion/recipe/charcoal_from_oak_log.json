@@ -1,0 +1,9 @@
+{
+  "type": "abyss-of-illusion:campfire_recipe",
+  "input": "minecraft:oak_log",
+  "output": {
+    "amount": 1,
+    "id": "minecraft:charcoal"
+  },
+  "recipe_id": "abyss-of-illusion:test_recipe"
+}

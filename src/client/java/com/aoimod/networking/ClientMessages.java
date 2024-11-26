@@ -7,10 +7,7 @@ import com.aoimod.networking.packet.ThirstyS2CPacket;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class ClientMessages {
     public static void initialize() {
@@ -27,12 +24,11 @@ public class ClientMessages {
     }
 
     private static void campfireHandler(CampfireDataS2CPacket packet, ClientPlayNetworking.Context context) {
-        CampfireBlockEntity.Packet p = packet.packet();
-        List<ItemStack> stacks = p.stacks();
         World world = context.player().getWorld();
         context.client().execute(() -> {
+            CampfireBlockEntity.Packet p = packet.inner();
             if (world.getBlockEntity(p.pos()) instanceof CampfireBlockEntity campfire) {
-                campfire.setStack(stacks);
+                campfire.loadPacket(p);
                 campfire.markDirty();
                 campfire.updateState(world);
             }

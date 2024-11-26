@@ -8,6 +8,7 @@ import com.aoimod.event.PlayerTick;
 import com.aoimod.extra.ModTreeDecoratorTypes;
 import com.aoimod.items.ModItemGroups;
 import com.aoimod.items.ModItems;
+import com.aoimod.recipes.ModRecipeTypes;
 import com.aoimod.networking.ServerMessages;
 
 import net.fabricmc.api.ModInitializer;
@@ -30,6 +31,7 @@ public class AbyssOfIllusionMod implements ModInitializer {
 		ModComponents.initialize();
 		ModItemGroups.initialize();
 		ModItems.initialize();
+		ModRecipeTypes.initialize();
 
 		ServerTickEvents.START_SERVER_TICK.register(new PlayerTick());
 	}
