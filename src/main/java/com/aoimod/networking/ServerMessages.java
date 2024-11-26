@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import com.aoimod.custonvalues.IThirsty;
+import com.aoimod.customvalues.IThirsty;
 
 public class ServerMessages {
     public static void initialize() {
@@ -22,11 +22,11 @@ public class ServerMessages {
         ServerPlayerEntity player = context.player();
         IThirsty thirsty = (IThirsty) player;
         thirsty.getThirsty().setThirst(packet.drinkValue());
-        ServerPlayNetworking.send(player, new ThirstyS2CPacket(thirsty.getThirsty().getThirst()));
+        syncThirstToClient(player);
     }
 
     public static void syncThirstToClient(ServerPlayerEntity player) {
         float thirstValue = ((IThirsty) player).getThirsty().getThirst();
-        ServerPlayNetworking.send(player, new ThirstyS2CPacket(thirstValue));
+        player.server.execute(() -> ServerPlayNetworking.send(player, new ThirstyS2CPacket(thirstValue)));
     }
 }

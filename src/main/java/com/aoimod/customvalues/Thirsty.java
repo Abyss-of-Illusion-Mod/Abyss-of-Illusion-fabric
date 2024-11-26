@@ -1,4 +1,4 @@
-package com.aoimod.custonvalues;
+package com.aoimod.customvalues;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 

@@ -7,8 +7,6 @@ public class Rotate {
         Vector3f rotated = rotate(angle,
                 xyz.sub(px, py, pz),
                 ax, ay, az);
-//        System.out.printf("PreRotated Point: (%.5f, %.5f, %.5f)%n", x, y, z);
-//        System.out.printf("Rotated Point: (%.5f, %.5f, %.5f)%n", rotated[0], rotated[1], rotated[2]);
         return rotated.add(px, py, pz);
     }
     public static Vector3f rotate(float angle, Vector3f xyz, float ax, float ay, float az) {

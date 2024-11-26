@@ -1,7 +1,7 @@
 package com.aoimod.networking;
 
 import com.aoimod.blockentities.CampfireBlockEntity;
-import com.aoimod.custonvalues.IThirsty;
+import com.aoimod.customvalues.IThirsty;
 import com.aoimod.networking.packet.CampfireDataS2CPacket;
 import com.aoimod.networking.packet.ThirstyS2CPacket;
 

@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 
 import java.util.Random;
 
-import com.aoimod.custonvalues.IThirsty;
+import com.aoimod.customvalues.IThirsty;
 import com.aoimod.networking.ServerMessages;
 
 public class PlayerTick implements ServerTickEvents.StartTick {

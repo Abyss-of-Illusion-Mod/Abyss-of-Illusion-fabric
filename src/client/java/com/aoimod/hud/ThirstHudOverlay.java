@@ -1,7 +1,7 @@
 package com.aoimod.hud;
 
 import com.aoimod.AbyssOfIllusionMod;
-import com.aoimod.custonvalues.IThirsty;
+import com.aoimod.customvalues.IThirsty;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
