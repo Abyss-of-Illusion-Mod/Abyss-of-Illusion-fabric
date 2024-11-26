@@ -24,8 +24,7 @@ public class ThirstHudOverlay implements HudRenderCallback {
     @Override
     public void onHudRender(DrawContext drawContext, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null && !client.player.isInvulnerable() && !client.player.isCreative()
-                && !client.player.isSpectator())
+        if (client.player != null && (client.player.isCreative() || client.player.isSpectator()))
             return;
 
         IThirsty thirsty = (IThirsty) client.player;

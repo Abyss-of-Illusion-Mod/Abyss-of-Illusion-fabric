@@ -21,6 +21,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -88,6 +89,14 @@ public class CampfireBlockEntity extends BlockEntity implements RecipeInput {
         return twigs;
     }
 
+    public ItemStack getFuel() {
+        return fuel;
+    }
+
+    public List<ItemStack> getInventory() {
+        return inventory;
+    }
+
     public void addTwigs(ItemStack stack) {
         for (int i=0; i<twigs.size() && stack.getCount() != 0; i++) {
             if (twigs.get(i).isEmpty()) {
@@ -140,10 +149,13 @@ public class CampfireBlockEntity extends BlockEntity implements RecipeInput {
     }
 
     public void dropItems(World world) {
-        for (var stack: twigs) {
-            if (!stack.isEmpty())
-                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), stack);
-        }
+        ArrayList<ItemStack> items = new ArrayList<>(twigs);
+        items.add(twigResult);
+        items.add(fuel);
+        items.addAll(inventory);
+        DefaultedList<ItemStack> result = DefaultedList.of();
+        result.addAll(items);
+        ItemScatterer.spawn(world, pos, result);
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, CampfireBlockEntity blockEntity) {
@@ -168,6 +180,17 @@ public class CampfireBlockEntity extends BlockEntity implements RecipeInput {
                 .map(stack -> stack.toNbt(registries))
                 .forEach(list::add);
         nbt.put("twigs", list);
+        if (!twigResult.isEmpty())
+            nbt.put("twig_result", twigResult.toNbt(registries));
+
+        if (!fuel.isEmpty())
+            nbt.put("fuel", fuel.toNbt(registries));
+
+        if (!inventory.getFirst().isEmpty())
+            nbt.put("item", inventory.getFirst().toNbt(registries));
+
+        if (!inventory.getLast().isEmpty())
+            nbt.put("item_result", inventory.getLast().toNbt(registries));
     }
 
     @Override
@@ -180,5 +203,10 @@ public class CampfireBlockEntity extends BlockEntity implements RecipeInput {
         for (int i=0; i<stacks.size(); i++) {
             twigs.set(i, stacks.get(i));
         }
+
+        twigResult = ItemStack.fromNbtOrEmpty(registries, (NbtCompound) Objects.requireNonNullElse(nbt.get("twig_result"), new NbtCompound()));
+        fuel = ItemStack.fromNbtOrEmpty(registries, (NbtCompound) Objects.requireNonNullElse(nbt.get("fuel"), new NbtCompound()));
+        inventory.set(0, ItemStack.fromNbtOrEmpty(registries, (NbtCompound) Objects.requireNonNullElse(nbt.get("item"), new NbtCompound())));
+        inventory.set(1, ItemStack.fromNbtOrEmpty(registries, (NbtCompound) Objects.requireNonNullElse(nbt.get("item_result"), new NbtCompound())));
     }
 }

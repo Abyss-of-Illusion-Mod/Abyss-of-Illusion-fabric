@@ -12,6 +12,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.util.math.Direction;
@@ -63,6 +64,7 @@ public class CampfireBlockEntityRenderer implements BlockEntityRenderer<Campfire
         List<ItemStack> twigs = campfire.getTwigs().stream().filter(stack -> !stack.isEmpty()).toList();
         ListIterator<ItemStack> iter = twigs.listIterator();
         float[] degrees = new float[] { 0, 180, 270, 180 };
+        matrices.push();
         matrices.translate(0.5f, -0.36f, 0.5f);
         matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(180));
         while (iter.hasNext()) {
@@ -76,6 +78,42 @@ public class CampfireBlockEntityRenderer implements BlockEntityRenderer<Campfire
                 matrices.translate(0, -0.06f, 0);
             matrices.translate(-0.05f, 0, 0);
             itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, renderLight, overlay, matrices, vertexConsumers, campfire.getWorld(), 0);
+
+            matrices.pop();
+        }
+
+        matrices.pop();
+
+        ItemStack fuel = campfire.getFuel();
+        if (!fuel.isEmpty()) {
+            matrices.push();
+
+            matrices.translate(0.5f, 0.1f, 0.5f);
+            if (!(fuel.getItem() instanceof BlockItem)) {
+                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+                matrices.translate(0, -0.1, 0.05f);
+            }
+            itemRenderer.renderItem(fuel, ModelTransformationMode.GROUND, renderLight, overlay, matrices, vertexConsumers, campfire.getWorld(), 0);
+
+            matrices.pop();
+        }
+
+        List<ItemStack> inventory = campfire.getInventory();
+        ItemStack last = ItemStack.EMPTY;
+        for (var stack: inventory) {
+            if (!stack.isEmpty())
+                last = stack;
+        }
+
+        if (!last.isEmpty()) {
+            matrices.push();
+
+            matrices.translate(0.5f, 0.15f, 0.5f);
+            if (!(last.getItem() instanceof BlockItem)) {
+                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+                matrices.translate(0, -0.15, 0.15f);
+            }
+            itemRenderer.renderItem(last, ModelTransformationMode.GROUND, renderLight, overlay, matrices, vertexConsumers, campfire.getWorld(), 0);
 
             matrices.pop();
         }

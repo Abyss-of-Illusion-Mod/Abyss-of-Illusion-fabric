@@ -10,6 +10,9 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Optional;
+
 public record CampfireRecipe(Ingredient input, ItemStack output, Identifier id) implements Recipe<CampfireBlockEntity> {
     public static class Type implements RecipeType<CampfireRecipe> {
         public static final Type INSTANCE = new Type();
@@ -45,11 +48,11 @@ public record CampfireRecipe(Ingredient input, ItemStack output, Identifier id) 
 
     @Override
     public IngredientPlacement getIngredientPlacement() {
-        return null;
+        return IngredientPlacement.forMultipleSlots(List.of(Optional.of(input)));
     }
 
     @Override
     public RecipeBookCategory getRecipeBookCategory() {
-        return null;
+        return ModRecipeTypes.CAMPFIRE_BOOK_CATEGORY;
     }
 }

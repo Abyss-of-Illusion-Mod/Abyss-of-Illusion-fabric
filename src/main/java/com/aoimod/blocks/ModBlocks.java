@@ -1,9 +1,11 @@
 package com.aoimod.blocks;
 
 import com.aoimod.AbyssOfIllusionMod;
+import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
@@ -53,5 +55,11 @@ public class ModBlocks {
     }
 
     public static void initialize() {
+        int baseSmeltTime = 100;
+        FuelRegistryEvents.BUILD.register(
+                Identifier.of(AbyssOfIllusionMod.MOD_ID, "register_fuels"),
+                (builder, context) -> {
+                    builder.add(ModBlocks.TWIG, baseSmeltTime);
+                });
     }
 }
