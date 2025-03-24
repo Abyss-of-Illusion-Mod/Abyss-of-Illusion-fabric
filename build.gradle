@@ -52,8 +52,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-
-	implementation "org.unbroken-dome.base62:base62:1.1.0"
 }
 
 processResources {

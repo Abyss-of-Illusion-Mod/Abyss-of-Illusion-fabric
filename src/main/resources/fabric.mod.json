@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "abyss-of-illusion",
+	"id": "abyss-of-illusion-core",
 	"version": "${version}",
 	"name": "Abyss of Illusion",
 	"description": "",
@@ -9,21 +9,23 @@
 		""
 	],
 	"contact": {
-		"homepage": "https://github.com/Abyss-of-Illusion-Mod/Abyss-of-Illusion-fabric",
-		"sources": "https://github.com/Abyss-of-Illusion-Mod/Abyss-of-Illusion-fabric"
+		"homepage": "https://github.com/Abyss-of-Illusion-Mod/Abyss-of-Illusion-fabric-Core",
+		"sources": "https://github.com/Abyss-of-Illusion-Mod/Abyss-of-Illusion-fabric-Core"
+	},
+	"custom": {
+		"aoi-addon": true
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/abyss-of-illusion/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          	"com.aoimod.AbyssOfIllusionMod"
+			"com.aoimod.Main"
 		],
 		"client": [
-			"com.aoimod.AbyssOfIllusionClient"
+			"com.aoimod.MainClient"
 		],
 		"fabric-datagen": [
-			"com.aoimod.AbyssOfIllusionModGenerator"
 		]
 	},
 	"mixins": [
@@ -40,6 +42,5 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
 	}
 }
